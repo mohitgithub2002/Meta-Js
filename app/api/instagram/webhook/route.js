@@ -29,3 +29,14 @@ export async function GET(request) {
     });
   }
 }
+
+export async function POST(request) {
+  // Get the request body
+  const body = await request.json();
+
+  // Log the received data
+  console.log('Received data:', body);
+
+  // Respond with a success message
+  return NextResponse.json({ message: 'Webhook received successfully' });
+}
