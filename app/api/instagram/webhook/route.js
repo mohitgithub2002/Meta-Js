@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-
+import { connectDB, WebhookData } from '@/utils/db';
 export async function GET(request) {
   // Get the query parameters from the request
   const { searchParams } = new URL(request.url);
@@ -32,8 +32,14 @@ export async function GET(request) {
 
 export async function POST(request) {
   // Get the request body
+  await connectDB();
   const body = await request.json();
 
+  const webhookData = new WebhookData({
+    data: body
+  });
+  await webhookData.save();
+  console.log('Webhook data saved to database:', body);
   // Log the received data
   console.log('Received data:', body);
 
