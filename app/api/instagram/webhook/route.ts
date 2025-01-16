@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectDB, WebhookData } from '@/utils/db';
-export async function GET(request) {
+import sendMessage from '@/server/send_message/send';
+
+export async function GET(request: Request) {
   // Get the query parameters from the request
   const { searchParams } = new URL(request.url);
 
@@ -17,7 +19,7 @@ export async function GET(request) {
     console.log('Webhook verified successfully');
 
     // Respond with the challenge to confirm verification
-    return NextResponse.json(parseInt(challenge), {
+    return NextResponse.json(parseInt(challenge || '0'), {
       status: 200,
     });
   } else {
@@ -30,7 +32,7 @@ export async function GET(request) {
   }
 }
 
-export async function POST(request) {
+export async function POST(request: Request) {
   // Get the request body
   await connectDB();
   const body = await request.json();
@@ -42,7 +44,8 @@ export async function POST(request) {
   console.log('Webhook data saved to database:', body);
   // Log the received data
   console.log('Received data:', body);
-
+  await sendMessage(body);
+  
   // Respond with a success message
   return NextResponse.json({ message: 'Webhook received successfully' });
 }
