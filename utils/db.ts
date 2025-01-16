@@ -14,11 +14,3 @@ export async function connectDB() {
   }
 }
 
-// Create a schema for Instagram webhook data
-const webhookSchema = new mongoose.Schema({
-  data: Object,
-  receivedAt: { type: Date, default: Date.now }
-});
-
-// Create and export the model
-export const WebhookData = mongoose.models.WebhookData || mongoose.model('WebhookData', webhookSchema);
